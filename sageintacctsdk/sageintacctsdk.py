@@ -3,7 +3,7 @@ Sage Intacct Python SDK
 """
 from .apis import ApiBase, Contacts, Locations, Employees, Accounts, ExpenseTypes, Attachments, ExpenseReports,\
     Vendors, Bills, Projects, Departments, ChargeCardAccounts, ChargeCardTransactions, Customers, Items,\
-    APPayments, Reimbursements, CheckingAccounts, SavingsAccounts, Tasks, ExpensePaymentTypes, Dimensions,\
+    APPayments, ARPaymentItems, Reimbursements, CheckingAccounts, SavingsAccounts, Tasks, ExpensePaymentTypes, Dimensions,\
     DimensionValues, LocationEntities, ARInvoices, ARPayments, TaxDetails, GLDetail, Classes, JournalEntries,\
     RevRecSchedules, RevRecScheduleEntries, CostTypes
 
@@ -50,6 +50,7 @@ class SageIntacctSDK:
         self.items = Items()
         self.ap_payments = APPayments()
         self.ar_payments = ARPayments()
+        self.ar_payment_item.set_session_id(self.__session_id)
         self.ar_invoices = ARInvoices()
         self.reimbursements = Reimbursements()
         self.checking_accounts = CheckingAccounts()
@@ -92,6 +93,7 @@ class SageIntacctSDK:
         self.items.set_sender_id(self.__sender_id)
         self.ap_payments.set_sender_id(self.__sender_id)
         self.ar_payments.set_sender_id(self.__sender_id)
+        self.ar_payment_item.set_session_id(self.__session_id)
         self.ar_invoices.set_sender_id(self.__sender_id)
         self.reimbursements.set_sender_id(self.__sender_id)
         self.checking_accounts.set_sender_id(self.__sender_id)
@@ -131,6 +133,7 @@ class SageIntacctSDK:
         self.items.set_sender_password(self.__sender_password)
         self.ap_payments.set_sender_password(self.__sender_password)
         self.ar_payments.set_sender_password(self.__sender_password)
+        self.ar_payment_item.set_session_id(self.__session_id)
         self.ar_invoices.set_sender_password(self.__sender_password)
         self.reimbursements.set_sender_password(self.__sender_password)
         self.checking_accounts.set_sender_password(self.__sender_password)
@@ -172,6 +175,7 @@ class SageIntacctSDK:
         self.items.set_session_id(self.__session_id)
         self.ap_payments.set_session_id(self.__session_id)
         self.ar_payments.set_session_id(self.__session_id)
+        self.ar_payment_item.set_session_id(self.__session_id)
         self.ar_invoices.set_session_id(self.__session_id)
         self.reimbursements.set_session_id(self.__session_id)
         self.checking_accounts.set_session_id(self.__session_id)
