@@ -19,11 +19,11 @@ class ARPaymentItems(ApiBase):
         """
         data = {
             'readByQuery': {
-                'object': 'ARPYMT',
+                'object': 'ARPAYMENTITEM',
                 'fields': '*',
                 'query': None,
                 'pagesize': '1000'
             }
         }
-
+        print(self.format_and_send_request(data)['data'])
         return self.format_and_send_request(data)['data']['arpaymentitem']
