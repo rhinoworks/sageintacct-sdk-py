@@ -49,7 +49,7 @@ class SageIntacctSDK:
         self.customers = Customers()
         self.items = Items()
         self.ap_payments = APPayments()
-        self.ar_payments = APPayments()
+        self.ar_payments = ARPayments()
         self.ar_invoices = ARInvoices()
         self.reimbursements = Reimbursements()
         self.checking_accounts = CheckingAccounts()
