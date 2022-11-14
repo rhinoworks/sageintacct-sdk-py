@@ -22,9 +22,9 @@ class ARPaymentItems(ApiBase):
                 'object': 'ARPAYMENTITEM',
                 'fields': '*',
                 'query': None,
-                'pagesize': str(pagesize),
-                'offset': str(offset)
+                'pagesize': pagesize,
+                'offset': offset
             }
         }
-        print(self.format_and_send_request(data)['data'])
+        #print(self.format_and_send_request(data)['data'])
         return self.format_and_send_request(data)['data']['arpaymentitem']
