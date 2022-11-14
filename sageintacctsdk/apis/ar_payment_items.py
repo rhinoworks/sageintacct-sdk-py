@@ -11,7 +11,7 @@ class ARPaymentItems(ApiBase):
     def __init__(self):
         ApiBase.__init__(self, dimension='ARPAYMENTITEM')
 
-    def get_all(self):
+    def get_all(self, pagesize=1000, offset=0):
         """Get all AR Payments from Sage Intacct
 
         Returns:
@@ -22,7 +22,8 @@ class ARPaymentItems(ApiBase):
                 'object': 'ARPAYMENTITEM',
                 'fields': '*',
                 'query': None,
-                'pagesize': '1000'
+                'pagesize': str(pagesize),
+                'offset': str(offset)
             }
         }
         print(self.format_and_send_request(data)['data'])
