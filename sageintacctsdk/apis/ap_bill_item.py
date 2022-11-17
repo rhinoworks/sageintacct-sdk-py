@@ -6,10 +6,10 @@ from typing import Dict
 from .api_base import ApiBase
 
 
-class APBillDetail(ApiBase):
+class APBillItem(ApiBase):
     """Class for AP Payments APIs."""
     def __init__(self):
-        ApiBase.__init__(self, dimension='APBILLDETAIL')
+        ApiBase.__init__(self, dimension='APBILLITEM')
 
     def get_all(self):
         """Get all AP Bill Detail items from Sage Intacct
@@ -19,11 +19,11 @@ class APBillDetail(ApiBase):
         """
         data = {
             'readByQuery': {
-                'object': 'APBILLDETAIL',
+                'object': 'APBILLITEM',
                 'fields': '*',
                 'query': None,
                 'pagesize': '1000'
             }
         }
 
-        return self.format_and_send_request(data)['data']['apbilldetail']
+        return self.format_and_send_request(data)['data']['apbillitem']
