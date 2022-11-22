@@ -395,7 +395,7 @@ class ApiBase:
         complete_data = []
         count = self.count()
         pagesize = self.__pagesize
-        for record in tqdm(prepared_dataset, desc="Syncing Records", ascii=False):
+        for offset in tqdm(range(0, count, pagesize), desc="Fetching %s" % self.__dimension, ascii=False):
             data = {
                 'query': {
                     'object': self.__dimension,
