@@ -3,7 +3,7 @@ Sage Intacct Python SDK
 """
 from .apis import ApiBase, Contacts, Locations, Employees, Accounts, ExpenseTypes, Attachments, ExpenseReports,\
     Vendors, Bills, Projects, Departments, ChargeCardAccounts, ChargeCardTransactions, Customers, Items,\
-    APPayments, ARPaymentItems, Reimbursements, CheckingAccounts, SavingsAccounts, Tasks, ExpensePaymentTypes, Dimensions,\
+    APPayments, ARPaymentDetail, Reimbursements, CheckingAccounts, SavingsAccounts, Tasks, ExpensePaymentTypes, Dimensions,\
     DimensionValues, LocationEntities, ARInvoices, ARPayments, TaxDetails, GLDetail, Classes, JournalEntries,\
     RevRecSchedules, RevRecScheduleEntries, CostTypes, APBillItem
 
@@ -51,7 +51,7 @@ class SageIntacctSDK:
         self.ap_payments = APPayments()
         self.ap_bill_item = APBillItem()
         self.ar_payments = ARPayments()
-        self.ar_payment_item = ARPaymentItems()
+        self.ar_payment_detail = ARPaymentDetail()
         self.ar_invoices = ARInvoices()
         self.reimbursements = Reimbursements()
         self.checking_accounts = CheckingAccounts()
@@ -95,7 +95,7 @@ class SageIntacctSDK:
         self.ap_payments.set_sender_id(self.__sender_id)
         self.ap_bill_item.set_sender_id(self.__sender_id)
         self.ar_payments.set_sender_id(self.__sender_id)
-        self.ar_payment_item.set_sender_id(self.__sender_id)
+        self.ar_payment_detail.set_sender_id(self.__sender_id)
         self.ar_invoices.set_sender_id(self.__sender_id)
         self.reimbursements.set_sender_id(self.__sender_id)
         self.checking_accounts.set_sender_id(self.__sender_id)
@@ -136,7 +136,7 @@ class SageIntacctSDK:
         self.ap_payments.set_sender_password(self.__sender_password)
         self.ap_bill_item.set_sender_password(self.__sender_password)
         self.ar_payments.set_sender_password(self.__sender_password)
-        self.ar_payment_item.set_sender_password(self.__sender_password)
+        self.ar_payment_detail.set_sender_password(self.__sender_password)
         self.ar_invoices.set_sender_password(self.__sender_password)
         self.reimbursements.set_sender_password(self.__sender_password)
         self.checking_accounts.set_sender_password(self.__sender_password)
@@ -179,7 +179,7 @@ class SageIntacctSDK:
         self.ap_payments.set_session_id(self.__session_id)
         self.ap_bill_item.set_session_id(self.__session_id)
         self.ar_payments.set_session_id(self.__session_id)
-        self.ar_payment_item.set_session_id(self.__session_id)
+        self.ar_payment_detail.set_session_id(self.__session_id)
         self.ar_invoices.set_session_id(self.__session_id)
         self.reimbursements.set_session_id(self.__session_id)
         self.checking_accounts.set_session_id(self.__session_id)

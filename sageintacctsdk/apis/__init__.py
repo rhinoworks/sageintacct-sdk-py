@@ -21,7 +21,7 @@ from .ap_payments import APPayments
 from .ap_bill_item import APBillItem
 from .ar_invoices import ARInvoices
 from .ar_payments import ARPayments
-from .ar_payment_items import ARPaymentItems
+from .ar_payment_detail import ARPaymentDetail
 from .reimbursements import Reimbursements
 from .checking_accounts import CheckingAccounts
 from .savings_accounts import SavingsAccounts
@@ -58,7 +58,7 @@ __all__ = [
     'APPayments',
     'APBillItem',
     'ARPayments',
-    'ARPaymentItems',
+    'ARPaymentDetail',
     'ARInvoices',
     'Reimbursements',
     'CheckingAccounts',

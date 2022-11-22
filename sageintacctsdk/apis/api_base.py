@@ -11,6 +11,7 @@ import re
 
 import xmltodict
 import requests
+from tqdm import tqdm
 
 from ..exceptions import SageIntacctSDKError, ExpiredTokenError, InvalidTokenError, NoPrivilegeError, \
     WrongParamsError, NotFoundItemError, InternalServerError, DataIntegrityWarning
@@ -394,7 +395,7 @@ class ApiBase:
         complete_data = []
         count = self.count()
         pagesize = self.__pagesize
-        for offset in range(0, count, pagesize):
+        for record in tqdm(prepared_dataset, desc="Syncing Records", ascii=False):
             data = {
                 'query': {
                     'object': self.__dimension,
