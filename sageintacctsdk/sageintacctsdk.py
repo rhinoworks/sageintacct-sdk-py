@@ -5,7 +5,7 @@ from .apis import ApiBase, Contacts, Locations, Employees, Accounts, ExpenseType
     Vendors, Bills, Projects, Departments, ChargeCardAccounts, ChargeCardTransactions, Customers, Items,\
     APPayments, ARPaymentDetail, Reimbursements, CheckingAccounts, SavingsAccounts, Tasks, ExpensePaymentTypes, Dimensions,\
     DimensionValues, LocationEntities, ARInvoices, ARPayments, TaxDetails, GLDetail, Classes, JournalEntries,\
-    RevRecSchedules, RevRecScheduleEntries, CostTypes, APBillItem
+    RevRecSchedules, RevRecScheduleEntries, CostTypes, APBillItem, SODocument
 
 
 class SageIntacctSDK:
@@ -68,6 +68,7 @@ class SageIntacctSDK:
         self.rev_rec_schedules = RevRecSchedules()
         self.rev_rec_schedule_entries = RevRecScheduleEntries()
         self.cost_types = CostTypes()
+        self.sodocument = SODocument()
         self.update_sender_id()
         self.update_sender_password()
         self.update_session_id()
@@ -112,6 +113,7 @@ class SageIntacctSDK:
         self.rev_rec_schedules.set_sender_id(self.__sender_id)
         self.rev_rec_schedule_entries.set_sender_id(self.__sender_id)
         self.cost_types.set_sender_id(self.__sender_id)
+        self.sodocument.set_sender_id(self.__sender_id)
 
     def update_sender_password(self):
         """
@@ -147,6 +149,7 @@ class SageIntacctSDK:
         self.expense_payment_types.set_sender_password(self.__sender_password)
         self.location_entities.set_sender_password(self.__sender_password)
         self.tax_details.set_sender_password(self.__sender_password)
+        self.sodocument.set_sender_password(self.__sender_password)
         self.gl_detail.set_sender_password(self.__sender_password)
         self.classes.set_sender_password(self.__sender_password)
         self.journal_entries.set_sender_password(self.__sender_password)
@@ -176,6 +179,7 @@ class SageIntacctSDK:
         self.charge_card_transactions.set_session_id(self.__session_id)
         self.customers.set_session_id(self.__session_id)
         self.items.set_session_id(self.__session_id)
+        self.sodocument.set_session_id(self.__session_id)
         self.ap_payments.set_session_id(self.__session_id)
         self.ap_bill_item.set_session_id(self.__session_id)
         self.ar_payments.set_session_id(self.__session_id)

@@ -37,6 +37,7 @@ from .journal_entries import JournalEntries
 from .revenue_recognition_schedules import RevRecSchedules
 from .revenue_recognition_schedule_entries import RevRecScheduleEntries
 from .cost_types import CostTypes
+from .sodocument import SODocument
 
 __all__ = [
     'ApiBase',
@@ -69,6 +70,7 @@ __all__ = [
     'ExpensePaymentTypes',
     'LocationEntities',
     'TaxDetails',
+    'SODocument',
     'GLDetail',
     'Classes',
     'JournalEntries',
