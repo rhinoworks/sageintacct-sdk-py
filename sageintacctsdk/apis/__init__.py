@@ -38,6 +38,7 @@ from .revenue_recognition_schedules import RevRecSchedules
 from .revenue_recognition_schedule_entries import RevRecScheduleEntries
 from .cost_types import CostTypes
 from .sodocument import SODocument
+from .ar_payment_item import ARPaymentItem
 
 __all__ = [
     'ApiBase',
@@ -60,6 +61,7 @@ __all__ = [
     'APBillItem',
     'ARPayments',
     'ARPaymentDetail',
+    'ARPaymentItem',
     'ARInvoices',
     'Reimbursements',
     'CheckingAccounts',
