@@ -342,6 +342,12 @@ class ApiBase:
             }
         }
 
+        if (self.__dimension == 'SODOCUMENT'):
+            data['options'] = {
+                'showprivate': True
+            }
+            print("SODOCUMENT: Adding ShowPrivate option.")
+
         response = self.format_and_send_request(get_count)
         return int(response['data']['@totalcount'])
 
