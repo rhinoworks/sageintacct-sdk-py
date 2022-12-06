@@ -343,10 +343,10 @@ class ApiBase:
         }
 
         if (self.__dimension == 'SODOCUMENT'):
-            get_count['options'] = {
+            get_count['query']['options'] = {
                 'showprivate': 'true'
             }
-            print("SODOCUMENT: Adding ShowPrivate option.")
+            print("SODOCUMENT: COUNT: Adding ShowPrivate option.")
 
         response = self.format_and_send_request(get_count)
         return int(response['data']['@totalcount'])
@@ -414,10 +414,10 @@ class ApiBase:
             }
 
             if(self.__dimension == 'SODOCUMENT'):
-                data['options'] = {
+                data['query']['options'] = {
                     'showprivate': 'true'
                 }
-                print("SODOCUMENT: COUNT: Adding ShowPrivate option.")
+                print("SODOCUMENT: Adding ShowPrivate option.")
 
             if field and value:
                 data['query']['filter'] = {
