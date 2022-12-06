@@ -407,6 +407,12 @@ class ApiBase:
                 }
             }
 
+            if(self.__dimension == 'SODOCUMENT'):
+                data['options'] = {
+                    'showprivate': True
+                }
+                print("SODOCUMENT: Adding ShowPrivate option.")
+
             if field and value:
                 data['query']['filter'] = {
                     'equalto': {
