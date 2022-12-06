@@ -344,7 +344,7 @@ class ApiBase:
 
         if (self.__dimension == 'SODOCUMENT'):
             get_count['options'] = {
-                'showprivate': True
+                'showprivate': 'true'
             }
             print("SODOCUMENT: Adding ShowPrivate option.")
 
@@ -415,9 +415,9 @@ class ApiBase:
 
             if(self.__dimension == 'SODOCUMENT'):
                 data['options'] = {
-                    'showprivate': True
+                    'showprivate': 'true'
                 }
-                print("SODOCUMENT: Adding ShowPrivate option.")
+                print("SODOCUMENT: COUNT: Adding ShowPrivate option.")
 
             if field and value:
                 data['query']['filter'] = {
