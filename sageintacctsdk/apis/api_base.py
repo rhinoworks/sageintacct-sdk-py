@@ -343,7 +343,7 @@ class ApiBase:
         }
 
         if (self.__dimension == 'SODOCUMENT'):
-            data['options'] = {
+            get_count['options'] = {
                 'showprivate': True
             }
             print("SODOCUMENT: Adding ShowPrivate option.")
