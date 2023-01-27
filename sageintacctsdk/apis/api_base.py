@@ -342,7 +342,7 @@ class ApiBase:
             }
         }
 
-        if (self.__dimension == 'SODOCUMENT'):
+        if (self.__dimension == 'SODOCUMENT' or self.__dimension == 'ARINVOICE'):
             get_count['query']['options'] = {
                 'showprivate': 'true'
             }
