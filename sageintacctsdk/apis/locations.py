@@ -9,4 +9,4 @@ from .api_base import ApiBase
 class Locations(ApiBase):
     """Class for Locations APIs."""
     def __init__(self):
-        ApiBase.__init__(self, dimension='LOCATION', pagesize=25)
+        ApiBase.__init__(self, dimension='LOCATION', pagesize=2000)
