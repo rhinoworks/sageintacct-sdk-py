@@ -31,6 +31,30 @@ class Attachments(ApiBase):
         }
         return self.format_and_send_request(data)
 
+    def update(self, data: Dict):
+        """Update attachments to Sage Intacct.
+
+        Returns:
+            Dict of state of request with key.
+        """
+        data = {
+            'update_supdoc': data
+        }
+        return self.format_and_send_request(data)
+
+    def delete(self, key: str):
+        """Delete an attachment in Sage Intacct.
+
+        Returns:
+            Dict of state of request response
+        """
+        data = {
+            'delete_supdoc': {
+                '@key': key
+                }
+        }
+        return self.format_and_send_request(data)
+
     def get_folder(self, field: str, value: str):
         """Get attachment folder from Sage Intacct
 

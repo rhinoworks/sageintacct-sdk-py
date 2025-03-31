@@ -15,6 +15,8 @@ from .projects import Projects
 from .departments import Departments
 from .charge_card_accounts import ChargeCardAccounts
 from .charge_card_transactions import ChargeCardTransactions
+from .contract_lines import ContractLines
+from .contracts import Contracts
 from .customers import Customers
 from .items import Items
 from .ap_payments import APPayments
@@ -22,6 +24,7 @@ from .ap_bill_item import APBillItem
 from .ar_invoices import ARInvoices
 from .ar_payments import ARPayments
 from .ar_payment_detail import ARPaymentDetail
+from .ar_invoice_items import ARInvoiceItems
 from .reimbursements import Reimbursements
 from .checking_accounts import CheckingAccounts
 from .savings_accounts import SavingsAccounts
@@ -38,12 +41,16 @@ from .revenue_recognition_schedules import RevRecSchedules
 from .revenue_recognition_schedule_entries import RevRecScheduleEntries
 from .cost_types import CostTypes
 from .order_entry_transactions import OrderEntryTransactions
+from .allocation_entry import AllocationEntry
+from .allocations import Allocations
 from .sodocument import SODocument
 from .ar_payment_item import ARPaymentItem
 
 __all__ = [
     'ApiBase',
     'Contacts',
+    'Contracts',
+    'ContractLines',
     'Locations',
     'Employees',
     'Accounts',
@@ -63,7 +70,9 @@ __all__ = [
     'ARPayments',
     'ARPaymentDetail',
     'ARPaymentItem',
+    'AllocationEntry',
     'ARInvoices',
+    'ARInvoiceItems',
     'Reimbursements',
     'CheckingAccounts',
     'SavingsAccounts',
@@ -81,4 +90,5 @@ __all__ = [
     'RevRecScheduleEntries',
     'CostTypes',
     'OrderEntryTransactions',
+    'Allocations'
 ]
