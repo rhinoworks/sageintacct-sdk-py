@@ -2,6 +2,7 @@
 API Base class with util functions
 """
 import json
+import logging
 import datetime
 import uuid
 from warnings import warn
@@ -17,6 +18,8 @@ from ..exceptions import SageIntacctSDKError, ExpiredTokenError, InvalidTokenErr
     WrongParamsError, NotFoundItemError, InternalServerError, DataIntegrityWarning
 from .constants import dimensions_fields_mapping
 
+
+logger = logging.getLogger(__name__)
 
 class ApiBase:
     """The base class for all API classes."""
@@ -45,6 +48,14 @@ class ApiBase:
         :return: None
         """
         self.__sender_password = sender_password
+
+    def set_show_private(self, show_private: bool):
+        """
+        Set the show private for APIs
+        :param show_private: boolean
+        :return: None
+        """
+        self.__show_private = show_private
 
     def get_session_id(self, user_id: str, company_id: str, user_password: str, entity_id: str = None):
         """
@@ -179,17 +190,34 @@ class ApiBase:
             A response from the request (dict).
         """
 
+        logger.debug('Payload for post request: %s', dict_body)
         raw_response = self.__post_request_for_raw_response(dict_body, api_url)
-
-        parsed_xml = xmltodict.parse(raw_response.text, force_list={self.__dimension})
+        try:
+            parsed_xml = xmltodict.parse(raw_response.text, force_list={self.__dimension})
+        except:
+            #bad xml format from Sage Intacct fix
+            raw_response = '<root>' + raw_response.text + '</root>'
+            parsed_xml = xmltodict.parse(raw_response, force_list={self.__dimension})['root']
         parsed_response = json.loads(json.dumps(parsed_xml))
 
         if raw_response.status_code == 200:
+            response = parsed_response.get('response', {})
+            control_status = response.get('control', {}).get('status', '')
+            auth_status = response.get('operation', {}).get('authentication', {}).get('status', '')
+            result_status = response.get('operation', {}).get('result', {}).get('status', '')
+
+
+            if control_status == 'failure' or auth_status == 'failure' or result_status == 'failure':
+                logger.info('Response for post request: %s', raw_response.text)
+            else:
+                logger.debug('Response for post request: %s', raw_response.text)
+
             if parsed_response['response']['control']['status'] == 'success':
                 api_response = parsed_response['response']['operation']
 
             if parsed_response['response']['control']['status'] == 'failure':
                 exception_msg = self.__decode_support_id(parsed_response['response']['errormessage'])
+
                 raise WrongParamsError('Some of the parameters are wrong', exception_msg)
 
             if api_response['authentication']['status'] == 'failure':
@@ -223,16 +251,21 @@ class ApiBase:
                     }
                     raise WrongParamsError('Something went wrong', custom_response)
 
+
+        logger.info('Response for post request: %s', raw_response.text)
         if 'result' in parsed_response:
             if 'errormessage' in parsed_response['result']:
                 parsed_response = parsed_response['result']['errormessage']
-    
+
         if 'response' in parsed_response:
             if 'errormessage' in parsed_response['response']:
                 parsed_response = parsed_response['response']['errormessage']
 
         if raw_response.status_code == 400:
-            raise WrongParamsError('Some of the parameters are wrong', parsed_response)
+            if 'error' in parsed_response and isinstance(parsed_response['error'], dict) and 'errorno' in parsed_response['error'] and parsed_response['error']['errorno'] == 'invalidRequest':
+                raise InvalidTokenError('Invalid token / Incorrect credentials', parsed_response)
+            else:
+                raise WrongParamsError('Some of the parameters are wrong', parsed_response)
 
         if raw_response.status_code == 401:
             raise InvalidTokenError('Invalid token / Incorrect credentials', parsed_response)
@@ -287,6 +320,12 @@ class ApiBase:
                 }
             }
         }
+        if self.__show_private:
+            try:
+                options = {'showprivate': True}
+                dict_body['request']['operation']['content']['function']['query']['options'] = options
+            except KeyError:
+                pass
 
         response = self.__post_request(dict_body, self.__api_url)
         return response['result']
@@ -331,16 +370,21 @@ class ApiBase:
 
         return self.format_and_send_request(payload)
 
-    def count(self):
+    def count(self, field: str = 'STATUS', value: str = 'active'):
         get_count = {
             'query': {
                 'object': self.__dimension,
                 'select': {
                     'field': 'RECORDNO'
                 },
+                'filter': {
+                    'equalto': {'field': field, 'value': value}
+                },
                 'pagesize': '1'
             }
         }
+        if not field or not value:
+            del get_count['query']['filter']
 
         if (self.__dimension == 'SODOCUMENT' or self.__dimension == 'ARINVOICE'):
             get_count['query']['options'] = {
@@ -399,7 +443,7 @@ class ApiBase:
             List of Dict.
         """
         complete_data = []
-        count = self.count()
+        count = self.count(None)
         pagesize = self.__pagesize
         for offset in tqdm(range(0, count, pagesize), desc="Fetching %s" % self.__dimension, ascii=False):
             data = {
@@ -427,10 +471,77 @@ class ApiBase:
                     }
                 }
 
-            paginated_data = self.format_and_send_request(data)['data'][self.__dimension]
+            response = self.format_and_send_request(data)['data']
+            if self.__dimension not in response:
+                break
+            paginated_data = response[self.__dimension]
             complete_data.extend(paginated_data)
 
         return complete_data
+
+    def get_all_generator(self, field: str = None, value: str = None, fields: list = None, updated_at: str = None, order_by_field: str = None, order: str = None):
+        """
+        Get all data from Sage Intacct
+        """
+        count = self.count(None)
+        pagesize = self.__pagesize
+        for offset in range(0, count, pagesize):
+            data = {
+                'query': {
+                    'object': self.__dimension,
+                    'select': {
+                        'field': fields if fields else dimensions_fields_mapping[self.__dimension]
+                    },
+                    'orderby': None,
+                    'pagesize': pagesize,
+                    'offset': offset,
+                    'filter': None,
+                }
+            }
+
+            if order_by_field and order:
+                data['query']['orderby'] = {
+                    'order': {
+                        'field': order_by_field,
+                        order: None
+                    }
+                }
+
+            field_value_filter = (
+                {"equalto": {"field": field, "value": value}} if field and value else {}
+            )
+            updated_at_filter = (
+                {
+                    "greaterthanorequalto": (
+                        {"field": "WHENMODIFIED", "value": updated_at}
+                    )
+                }
+                if updated_at
+                else {}
+            )
+            # if we have updated_at_filter and field_value_filter we need to 'and' them
+            if updated_at_filter and field_value_filter:
+                data["query"]["filter"] = {
+                    "and": {**field_value_filter, **updated_at_filter}
+                }
+            # if we only have field_value filter, just use it
+            elif field_value_filter:
+                data["query"]["filter"] = field_value_filter
+            # if we only have updated_at filter, just use it
+            elif updated_at_filter:
+                data["query"]["filter"] = updated_at_filter
+
+            if not data['query']['filter']:
+                del data['query']['filter']
+            if not data['query']['orderby']:
+                del data['query']['orderby']
+
+            response = self.format_and_send_request(data)['data']
+            if self.__dimension in response:
+                yield self.format_and_send_request(data)['data'][self.__dimension]
+            else:
+                yield []
+
 
     __query_filter = List[Tuple[str, str, str]]
 
@@ -457,7 +568,8 @@ class ApiBase:
                 """
 
         complete_data = []
-        count = self.count()
+        filtered_total = None
+        count = self.count(None)
         pagesize = self.__pagesize
         offset = 0
         formatted_filter = filter_payload
@@ -505,7 +617,8 @@ class ApiBase:
         for offset in range(0, count, pagesize):
             data['query']['offset'] = offset
             paginated_data = self.format_and_send_request(data)['data']
-            complete_data.extend(paginated_data[self.__dimension])
+            if self.__dimension in paginated_data:
+                complete_data.extend(paginated_data[self.__dimension])
             filtered_total = int(paginated_data['@totalcount'])
             if paginated_data['@numremaining'] == '0':
                 break
@@ -525,3 +638,17 @@ class ApiBase:
 
         data = {'lookup': {'object': self.__dimension}}
         return self.format_and_send_request(data)['data']
+
+    def delete(self, key):
+        """
+        Delete the dimension with the given key
+        """
+
+        data = {
+            'delete': {
+                'object': self.__dimension,
+                'keys': str(key)
+            }
+        }
+
+        return self.format_and_send_request(data=data)
