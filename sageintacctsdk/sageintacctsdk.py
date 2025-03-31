@@ -5,7 +5,7 @@ from .apis import ApiBase, Contacts, Locations, Employees, Accounts, ExpenseType
     Vendors, Bills, Projects, Departments, ChargeCardAccounts, ChargeCardTransactions, Customers, Items,\
     APPayments, ARPaymentDetail, Reimbursements, CheckingAccounts, SavingsAccounts, Tasks, ExpensePaymentTypes, Dimensions,\
     DimensionValues, LocationEntities, ARInvoices, ARPayments, TaxDetails, GLDetail, Classes, JournalEntries,\
-    RevRecSchedules, RevRecScheduleEntries, CostTypes, APBillItem, SODocument, ARPaymentItem
+    RevRecSchedules, RevRecScheduleEntries, CostTypes, APBillItem, SODocument, ARPaymentItem, OrderEntryTransactions
 
 
 class SageIntacctSDK:
@@ -68,6 +68,7 @@ class SageIntacctSDK:
         self.rev_rec_schedules = RevRecSchedules()
         self.rev_rec_schedule_entries = RevRecScheduleEntries()
         self.cost_types = CostTypes()
+        self.order_entry_transactions = OrderEntryTransactions()
         self.sodocument = SODocument()
         self.ar_payment_item = ARPaymentItem()
         self.update_sender_id()
@@ -115,6 +116,7 @@ class SageIntacctSDK:
         self.rev_rec_schedules.set_sender_id(self.__sender_id)
         self.rev_rec_schedule_entries.set_sender_id(self.__sender_id)
         self.cost_types.set_sender_id(self.__sender_id)
+        self.order_entry_transactions.set_sender_id(self.__sender_id)
         self.sodocument.set_sender_id(self.__sender_id)
 
     def update_sender_password(self):
@@ -159,6 +161,7 @@ class SageIntacctSDK:
         self.rev_rec_schedules.set_sender_password(self.__sender_password)
         self.rev_rec_schedule_entries.set_sender_password(self.__sender_password)
         self.cost_types.set_sender_password(self.__sender_password)
+        self.order_entry_transactions.set_sender_password(self.__sender_password)
 
     def update_session_id(self):
         """
@@ -204,3 +207,4 @@ class SageIntacctSDK:
         self.rev_rec_schedules.set_session_id(self.__session_id)
         self.rev_rec_schedule_entries.set_session_id(self.__session_id)
         self.cost_types.set_session_id(self.__session_id)
+        self.order_entry_transactions.set_session_id(self.__session_id)
